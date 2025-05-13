@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Tipografías - Google Fonts</title>
+    <script>
+        const fonts = [
+            "Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Source Sans Pro", "Raleway", "Poppins", "Nunito", "Merriweather", 
+            "Playfair Display", "Fira Sans", "Work Sans", "Inter", "Ubuntu", "Bebas Neue", "Dancing Script", "Pacifico", "Caveat", "Cinzel", 
+            "Titillium Web", "Quicksand", "Arimo", "Barlow", "Josefin Sans", "Kanit", "Libre Baskerville", "Lora", "Manrope", "Mukta", 
+            "Overpass", "Righteous", "Saira", "Satisfy", "Space Grotesk", "Teko", "Varela Round", "Zilla Slab", "Abril Fatface", "Alata", 
+            "Anton", "Archivo", "Bungee", "Chivo", "Cormorant", "Exo", "Fugaz One", "Inconsolata", "Julius Sans One", "Maven Pro", 
+            "PT Sans", "Roboto Condensed", "Russo One", "Secular One", "Spectral", "Tinos", "Yanone Kaffeesatz", "ZCOOL XiaoWei", 
+            "Amatic SC", "Baloo 2", "Bitter", "Bree Serif", "Carter One", "Chewy", "Comfortaa", "Crete Round", "Eczar", "Gloria Hallelujah", 
+            "Indie Flower", "Kalam", "Lobster", "Merienda", "Noto Serif", "Permanent Marker", "Press Start 2P", "Shadows Into Light", "Special Elite"
+        ];
+
+        const themeFonts = {
+            "Infantil": ["Pacifico", "Chewy", "Indie Flower", "Amatic SC", "Lobster", "Gloria Hallelujah"],
+            "Corporativo": ["Roboto", "Open Sans", "Lato", "Montserrat", "Inter", "Work Sans", "Barlow"],
+            "Fantasía": ["Playfair Display", "Cinzel", "Dancing Script", "Josefin Sans", "Abril Fatface", "Righteous"],
+            "Moderno": ["Raleway", "Poppins", "Nunito", "Merriweather", "Exo", "Ubuntu", "Mukta"],
+            "Vintage": ["Bebas Neue", "Carter One", "Bree Serif", "Tinos", "Zilla Slab"],
+            "Tecnología": ["Fira Sans", "Source Sans Pro", "Inconsolata", "Maven Pro", "Overpass", "Roboto Condensed"]
+        };
+
+        function getPastelColor() {
+            const pastelColors = ["#FFB6C1", "#FFDDC1", "#FFC3A0", "#D4A5A5", "#C1E1C1", "#B5EAD7", "#A2D5AB", "#A0CED9", "#B5B9FF", "#D5A6BD"];
+            return pastelColors[Math.floor(Math.random() * pastelColors.length)];
+        }
+
+        function loadFonts() {
+            const fontList = document.getElementById('font-list');
+            const inputText = document.getElementById('text-input');
+            
+            fonts.forEach(font => {
+                const fontName = font.replace(/ /g, "+");
+                const fontLink = document.createElement('link');
+                fontLink.href = `https://fonts.googleapis.com/css2?family=${fontName}&display=swap`;
+                fontLink.rel = 'stylesheet';
+                document.head.appendChild(fontLink);
+
+                const fontItem = document.createElement('div');
+                fontItem.classList.add('font-item');
+                fontItem.style.fontFamily = `'${font}', sans-serif`;
+                fontItem.style.backgroundColor = getPastelColor();
+                fontItem.innerHTML = `
+                    <p class="font-name">${font}</p>
+                    <p class="sample-text">${inputText.value || 'Texto de prueba'}</p>
+                    <a href="https://fonts.google.com/specimen/${font.replace(/ /g, '+')}" target="_blank" class="download-button">Descargar</a>
+                `;
+                fontList.appendChild(fontItem);
+            });
+        }
+
+        function updateSampleText() {
+            const sampleTexts = document.querySelectorAll('.sample-text');
+            const newText = document.getElementById('text-input').value;
+            sampleTexts.forEach(text => text.textContent = newText || 'Texto de prueba');
+        }
+
+        function filterFontsByTheme() {
+            const themeInput = document.getElementById('theme-input').value.toLowerCase();
+            const fontList = document.getElementById('font-list');
+            fontList.innerHTML = '';  // Limpiar la lista de fuentes actuales
+
+            let filteredFonts = [];
+            for (let theme in themeFonts) {
+                if (theme.toLowerCase().includes(themeInput)) {
+                    filteredFonts = themeFonts[theme];
+                    break;
+                }
+            }
+
+            if (filteredFonts.length > 0) {
+                filteredFonts.forEach(font => {
+                    const fontName = font.replace(/ /g, "+");
+                    const fontLink = document.createElement('link');
+                    fontLink.href = `https://fonts.googleapis.com/css2?family=${fontName}&display=swap`;
+                    fontLink.rel = 'stylesheet';
+                    document.head.appendChild(fontLink);
+
+                    const fontItem = document.createElement('div');
+                    fontItem.classList.add('font-item');
+                    fontItem.style.fontFamily = `'${font}', sans-serif`;
+                    fontItem.style.backgroundColor = getPastelColor();
+                    fontItem.innerHTML = `
+                        <p class="font-name">${font}</p>
+                        <p class="sample-text">Texto de prueba</p>
+                        <a href="https://fonts.google.com/specimen/${font.replace(/ /g, '+')}" target="_blank" class="download-button">Descargar</a>
+                    `;
+                    fontList.appendChild(fontItem);
+                });
+            } else {
+                fontList.innerHTML = '<p>No se encontraron tipografías para este tema.</p>';
+            }
+        }
+
+        window.onload = loadFonts;
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        #text-input, #theme-input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .font-item {
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin: 10px auto;
+            width: 90%;
+            max-width: 600px;
+            color: #333;
+        }
+        .font-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .sample-text {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        .download-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Comparador de Tipografías</h1>
+    <input type="text" id="text-input" placeholder="Escribe un texto..." oninput="updateSampleText()">
+    <div id="font-list"></div>
+    <h2>¿Necesitas una tipografía para un tema específico?</h2>
+    <input type="text" id="theme-input" placeholder="Escribe un tema (Ej: Infantil, Corporativo, Fantasía)">
+    <button onclick="filterFontsByTheme()">Buscar tipografías</button>
+</body>
+</html>
